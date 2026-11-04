@@ -21,14 +21,14 @@ export class User {
   id: string;
 
   @Index({ unique: true })
-  @Column({ length: 150, unique: true })
+  @Column({ type: 'varchar', length: 150, unique: true })
   email: string;
 
   // Stored with select: false so password hashes are never exposed in standard queries
-  @Column({ name: 'password_hash', length: 255, select: false })
+  @Column({ name: 'password_hash', type: 'varchar', length: 255, select: false })
   passwordHash: string;
 
-  @Column({ name: 'full_name', length: 120 })
+  @Column({ name: 'full_name', type: 'varchar', length: 120 })
   fullName: string;
 
   @Column({
@@ -49,10 +49,16 @@ export class User {
   client: Client | null;
 
   // SHA-256 hashed refresh token with select: false for rotation and revocation
-  @Column({ name: 'refresh_token_hash', length: 255, nullable: true, select: false })
+  @Column({
+    name: 'refresh_token_hash',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    select: false,
+  })
   refreshTokenHash: string | null;
 
-  @Column({ name: 'is_active', default: true })
+  @Column({ name: 'is_active', type: 'boolean', default: true })
   isActive: boolean;
 
   @CreateDateColumn({ name: 'created_at' })
@@ -70,4 +76,3 @@ export class User {
   @OneToMany('Notification', (notification: Notification) => notification.recipient)
   notifications: Notification[];
 }
-

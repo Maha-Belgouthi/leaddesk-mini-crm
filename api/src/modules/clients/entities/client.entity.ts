@@ -15,18 +15,18 @@ export class Client {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ length: 150 })
+  @Column({ type: 'varchar', length: 150 })
   name: string;
 
   @Index({ unique: true })
-  @Column({ length: 100, unique: true })
+  @Column({ type: 'varchar', length: 100, unique: true })
   slug: string;
 
-  @Column({ length: 150, nullable: true })
-  email: string;
+  @Column({ type: 'varchar', length: 150, nullable: true })
+  email: string | null;
 
-  @Column({ length: 30, nullable: true })
-  phone: string;
+  @Column({ type: 'varchar', length: 30, nullable: true })
+  phone: string | null;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
@@ -40,4 +40,3 @@ export class Client {
   @OneToMany('Lead', (lead: Lead) => lead.client)
   leads: Lead[];
 }
-

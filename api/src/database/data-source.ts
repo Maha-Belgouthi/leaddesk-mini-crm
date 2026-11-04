@@ -10,7 +10,7 @@ import { Notification } from '../modules/notifications/entities/notification.ent
 // Load environment variables for TypeORM CLI operations
 dotenv.config({ path: ['../.env', '.env'] });
 
-export const AppDataSource = new DataSource({
+const AppDataSource = new DataSource({
   type: 'postgres',
   host: process.env.DB_HOST ?? 'localhost',
   port: parseInt(process.env.DB_PORT ?? '5432', 10),
@@ -29,4 +29,3 @@ export const AppDataSource = new DataSource({
 });
 
 export default AppDataSource;
-
