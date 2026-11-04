@@ -10,3 +10,4 @@ export class AssignLeadDto {
   @IsNotEmpty({ message: 'Assigned user ID is required' })
   assignedToId: string;
 }
+

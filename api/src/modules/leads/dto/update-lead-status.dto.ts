@@ -12,3 +12,4 @@ export class UpdateLeadStatusDto {
   @IsNotEmpty({ message: 'Status is required' })
   status: LeadStatus;
 }
+
