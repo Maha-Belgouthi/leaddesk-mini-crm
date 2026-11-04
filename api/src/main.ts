@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -14,6 +15,15 @@ async function bootstrap() {
 
   // Enforce global /api prefix
   app.setGlobalPrefix('api');
+
+  // Enforce global validation with whitelist and forbidNonWhitelisted
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
 
   // Configure Swagger documentation at /api/docs
   const config = new DocumentBuilder()
