@@ -49,4 +49,9 @@ export class UsersService {
   async updateRefreshTokenHash(userId: string, hash: string | null): Promise<void> {
     await this.usersRepo.update(userId, { refreshTokenHash: hash });
   }
+
+  async create(data: Partial<User>): Promise<User> {
+    const user = this.usersRepo.create(data);
+    return this.usersRepo.save(user);
+  }
 }
