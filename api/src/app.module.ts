@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import databaseConfig from './config/database.config.js';
@@ -27,6 +28,15 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
       useFactory: (configService: ConfigService) =>
         configService.getOrThrow('database'),
     }),
+    ThrottlerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => [
+        {
+          ttl: parseInt(configService.get('THROTTLE_TTL') ?? '60000', 10),
+          limit: parseInt(configService.get('THROTTLE_LIMIT') ?? '100', 10),
+        },
+      ],
+    }),
     AuthModule,
     ClientsModule,
     UsersModule,
@@ -38,6 +48,10 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
   controllers: [AppController],
   providers: [
     AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
