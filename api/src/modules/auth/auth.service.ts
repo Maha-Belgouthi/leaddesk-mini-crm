@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import * as bcrypt from 'bcrypt';
 import {
   Injectable,
@@ -21,6 +21,7 @@ export interface JwtPayload {
 
 export interface RefreshJwtPayload {
   sub: string;
+  jti?: string;
 }
 
 @Injectable()
@@ -170,6 +171,7 @@ export class AuthService {
 
     const refreshPayload: RefreshJwtPayload = {
       sub: user.id,
+      jti: randomUUID(),
     };
 
     const [accessToken, refreshToken] = await Promise.all([
