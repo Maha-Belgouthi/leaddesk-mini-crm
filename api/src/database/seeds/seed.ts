@@ -33,12 +33,9 @@ export async function runSeed(): Promise<void> {
   const existingClient = await clientRepo.findOneBy({ slug: 'apex-dental' });
   if (existingClient) {
     console.log('Seeded data already exists. Cleaning up existing leads and notes to re-seed cleanly...');
-    await notificationRepo.delete({});
-    await activityRepo.delete({});
-    await noteRepo.delete({});
-    await leadRepo.delete({});
-    await userRepo.delete({});
-    await clientRepo.delete({});
+    await AppDataSource.query(
+      'TRUNCATE TABLE notifications, activity_logs, notes, leads, users, clients CASCADE;',
+    );
   }
 
   // 2. Seed 3 Diverse Clients
@@ -345,7 +342,7 @@ export async function runSeed(): Promise<void> {
 }
 
 // Direct execution when invoked via CLI runner
-if (process.argv[1]?.includes('seed.ts')) {
+if (process.argv[1]?.includes('seed')) {
   runSeed()
     .then(async () => {
       await AppDataSource.destroy();
