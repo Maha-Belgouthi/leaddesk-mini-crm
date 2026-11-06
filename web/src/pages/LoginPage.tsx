@@ -29,10 +29,20 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onOpenPublicForm }) => {
     }
   };
 
-  const handleQuickLogin = (demoEmail: string, demoPass: string) => {
+  const handleQuickLogin = async (demoEmail: string, demoPass: string) => {
     setEmail(demoEmail);
     setPassword(demoPass);
     setError(null);
+    setIsSubmitting(true);
+    try {
+      await login(demoEmail, demoPass);
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message || 'Authentication failed. Please verify your credentials.',
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

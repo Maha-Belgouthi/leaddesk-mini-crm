@@ -100,14 +100,14 @@ docker compose exec api npm run seed
 
 ## 5. Demo Accounts & Credentials
 
-The database seeder provisions 4 role-scoped test accounts (all passwords are `Password123!`):
+The database seeder provisions 4 role-scoped test accounts:
 
 | Role | Email | Password | Scoped Permissions |
 |---|---|---|---|
-| **Super Admin** | `admin@leaddesk.local` | `Password123!` | Global access across all clients, lead reassignment, full user management, internal notes. |
-| **Sales Rep 1** | `sales1@leaddesk.local` | `Password123!` | Manages assigned leads for Apex Dental & Apex Institute, status advancement, internal notes. |
-| **Sales Rep 2** | `sales2@leaddesk.local` | `Password123!` | Manages assigned leads for Metro Supermarket & Apex Dental, status advancement, internal notes. |
-| **Client Portal** | `client@apex.local` | `Password123!` | Read-only view for Apex Dental Care. **Internal notes are securely hidden.** |
+| **Super Admin** | `admin@leaddesk.local` | `Admin@123456` | Global access across all clients, lead reassignment, full user management, internal notes. |
+| **Sales Rep 1** | `sales1@leaddesk.local` | `Sales@123456` | Manages assigned leads for Apex Dental & Apex Institute, status advancement, internal notes. |
+| **Sales Rep 2** | `sales2@leaddesk.local` | `Sales@123456` | Manages assigned leads for QuickFix Auto & Apex Dental, status advancement, internal notes. |
+| **Client Portal** | `client@apex.local` | `Client@123456` | Read-only view for Apex Dental Care. **Internal notes are securely hidden.** |
 
 > **Tip:** The web login page includes **1-Click Quick Login buttons** for each role so you can switch personas instantly without typing credentials!
 
