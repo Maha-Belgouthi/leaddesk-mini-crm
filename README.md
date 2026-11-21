@@ -138,19 +138,15 @@ During the architectural design and implementation of LeadDesk Mini-CRM, several
 - **Decision:** Incoming public leads are assigned to the sales executive with the lowest count of active deals (`NEW`, `CONTACTED`, `PROPOSAL_SENT`).
 - **Trade-off:** Traditional round-robin requires maintaining a stateful pointer (e.g., in Redis or memory) indicating whose turn it is next, which breaks or requires distributed locking across multi-replica deployments. "Least Open Leads" is completely stateless, self-balancing, adjusts automatically when one rep closes deals faster, and is simple to unit test.
 
-### 4. Monetary Representation: Integer Rupees (₹) vs. Floats / Decimal
-- **Decision:** Budgets are stored as whole `integer` values representing Indian Rupees (₹).
-- **Trade-off:** Using JavaScript `number` for floating-point currency causes IEEE 754 precision bugs (e.g., `0.1 + 0.2 !== 0.3`), while PostgreSQL `numeric` types are returned as strings by TypeORM and require repeated parsing. For Indian SMB contracts (ranging from ₹10,000 to ₹5,00,000+), whole integer Rupees completely eliminate precision issues without performance overhead.
-
-### 5. Multi-Tenant Privacy: `404 Not Found` vs. `403 Forbidden`
+### 4. Multi-Tenant Privacy: `404 Not Found` vs. `403 Forbidden`
 - **Decision:** If a Sales Executive or Client requests a lead outside their assigned scope, the API returns `404 Not Found` rather than `403 Forbidden`.
 - **Trade-off:** A `403 Forbidden` response informs an attacker or malicious user that a specific lead ID exists in the system (ID enumeration). Returning `404 Not Found` keeps tenant boundaries completely opaque.
 
-### 6. Anti-Spam Strategy: Invisible Honeypot vs. CAPTCHA
+### 5. Anti-Spam Strategy: Invisible Honeypot vs. CAPTCHA
 - **Decision:** Public lead forms include an invisible honeypot field (`website_url_hp`) styled with `display: none` and `tabindex="-1"`. If populated, the API silently discards the lead with a `201 Created` status code.
 - **Trade-off:** Google reCAPTCHA or Cloudflare Turnstile adds third-party external scripts, cookie banners, and cognitive friction for human leads. The honeypot traps 99% of automated submission scripts seamlessly without any user friction.
 
-### 7. Token Storage & Refresh Queue: In-Memory Access Token + LocalStorage Refresh
+### 6. Token Storage & Refresh Queue: In-Memory Access Token + LocalStorage Refresh
 - **Decision:** The short-lived access token is held in memory, while the rotated refresh token is stored in `localStorage` for session persistence across page reloads. A single in-flight Axios promise queue serializes concurrent 401 token refresh requests.
 - **Trade-off:** While `httpOnly` cookies prevent XSS theft, they introduce CSRF vulnerabilities and cross-origin cookie complications in containerized development environments without HTTPS domains. The chosen pattern pairs a short (15-minute) access token with single-use refresh token rotation and instant revocation on suspicious reuse.
 
