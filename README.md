@@ -44,7 +44,7 @@ erDiagram
     LEAD ||--o{ NOTIFICATION : "generates alerts"
 
     CLIENT {
-        DataType id PK "Primary Key"
+        uuid id PK
         string name
         string slug "Unique, indexed"
         string email
@@ -54,12 +54,12 @@ erDiagram
     }
 
     USER {
-        DataType id PK "Primary Key"
+        uuid id PK
         string email "Unique, indexed"
         string passwordHash "Bcrypt hashed"
         string fullName
         string role "ADMIN, SALES_EXECUTIVE, CLIENT"
-        DataType clientId FK "Foreign Key"
+        uuid clientId FK
         string refreshTokenHash "SHA-256 nullable"
         boolean isActive
         timestamp createdAt
@@ -67,8 +67,8 @@ erDiagram
     }
 
     LEAD {
-        DataType id PK "Primary Key"
-        DataType clientId FK "Foreign Key"
+        uuid id PK
+        uuid clientId FK
         string name "pg_trgm indexed"
         string phone
         string email
@@ -78,7 +78,7 @@ erDiagram
         string status "NEW, CONTACTED, PROPOSAL_SENT, WON, LOST"
         string source "WEBSITE, GOOGLE_ADS, FACEBOOK, REFERRAL, OTHER"
         int score "0 to 100 quality score"
-        DataType assignedToId FK "Foreign Key"
+        uuid assignedToId FK
         boolean isOverdue "Flagged if overdue past 24h"
         timestamp contactedAt "Timestamp of first contact"
         timestamp createdAt
@@ -86,27 +86,27 @@ erDiagram
     }
 
     NOTE {
-        DataType id PK "Primary Key"
-        DataType leadId FK "Foreign Key"
-        DataType authorId FK "Foreign Key"
+        uuid id PK
+        uuid leadId FK
+        uuid authorId FK
         string content
         boolean isInternal "Hidden from client portal"
         timestamp createdAt
     }
 
     ACTIVITY_LOG {
-        DataType id PK "Primary Key"
-        DataType leadId FK "Foreign Key"
-        DataType actorId FK "Foreign Key"
+        uuid id PK
+        uuid leadId FK
+        uuid actorId FK
         string action "STATUS_CHANGE, REASSIGN, NOTE_ADDED"
         jsonb metadata "Old and new values"
         timestamp createdAt
     }
 
     NOTIFICATION {
-        DataType id PK "Primary Key"
-        DataType recipientId FK "Foreign Key"
-        DataType leadId FK "Foreign Key"
+        uuid id PK
+        uuid recipientId FK
+        uuid leadId FK
         string title
         string message
         boolean isRead
