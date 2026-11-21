@@ -120,7 +120,7 @@ erDiagram
 
 ---
 
-## 3. Key Design Decisions & Trade-Offs (In My Own Words)
+## 3. Key Design Decisions & Trade-Offs 
 
 During the architectural design and implementation of LeadDesk Mini-CRM, several critical technical decisions and trade-offs were made:
 
