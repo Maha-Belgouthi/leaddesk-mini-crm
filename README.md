@@ -44,7 +44,7 @@ erDiagram
     LEAD ||--o{ NOTIFICATION : "generates alerts"
 
     CLIENT {
-        uuid id PK
+        Data_Type id Primary_Key
         varchar name
         varchar slug UK "Indexed for public routing"
         varchar email
@@ -54,7 +54,7 @@ erDiagram
     }
 
     USER {
-        uuid id PK
+        Data_Type id Primary_Key
         varchar email UK "Indexed"
         varchar passwordHash "Bcrypt (10 rounds)"
         varchar fullName
@@ -67,7 +67,7 @@ erDiagram
     }
 
     LEAD {
-        uuid id PK
+        Data_Type id Primary_Key
         uuid clientId FK "Indexed"
         varchar name "pg_trgm indexed"
         varchar phone
@@ -86,7 +86,7 @@ erDiagram
     }
 
     NOTE {
-        uuid id PK
+        Data_Type id Primary_Key
         uuid leadId FK "Indexed"
         uuid authorId FK
         text content
@@ -95,7 +95,7 @@ erDiagram
     }
 
     ACTIVITY_LOG {
-        uuid id PK
+        Data_Type id Primary_Key
         uuid leadId FK "Indexed"
         uuid actorId FK
         varchar action "STATUS_CHANGE, REASSIGN, NOTE_ADDED"
@@ -104,7 +104,7 @@ erDiagram
     }
 
     NOTIFICATION {
-        uuid id PK
+        Data_Type id Primary_Key
         uuid recipientId FK "Indexed"
         uuid leadId FK
         varchar title
