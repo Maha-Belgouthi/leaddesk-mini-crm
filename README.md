@@ -44,75 +44,76 @@ erDiagram
     LEAD ||--o{ NOTIFICATION : "generates alerts"
 
     CLIENT {
-        Data_Type id Primary_Key
-        varchar name
-        varchar slug UK "Indexed for public routing"
-        varchar email
-        varchar phone
+        uuid id PK
+        string name
+        string slug "Unique slug indexed"
+        string email
+        string phone
         timestamp createdAt
         timestamp updatedAt
     }
 
     USER {
-        Data_Type id Primary_Key
-        varchar email UK "Indexed"
-        varchar passwordHash "Bcrypt (10 rounds)"
-        varchar fullName
-        enum role "ADMIN, SALES_EXECUTIVE, CLIENT"
-        uuid clientId FK "Nullable (for CLIENT role)"
-        varchar refreshTokenHash "SHA-256 nullable"
+        uuid id PK
+        string email "Unique email indexed"
+        string passwordHash "Bcrypt hashed"
+        string fullName
+        string role "ADMIN, SALES_EXECUTIVE, CLIENT"
+        uuid clientId FK "Nullable for admin"
+        string refreshTokenHash "SHA-256 nullable"
         boolean isActive
         timestamp createdAt
         timestamp updatedAt
     }
 
     LEAD {
-        Data_Type id Primary_Key
-        uuid clientId FK "Indexed"
-        varchar name "pg_trgm indexed"
-        varchar phone
-        varchar email
-        enum serviceNeeded "Fixed service tier"
-        integer budget "In whole INR (₹)"
-        text message
-        enum status "NEW, CONTACTED, PROPOSAL_SENT, WON, LOST"
-        enum source "WEBSITE, GOOGLE_ADS, FACEBOOK, REFERRAL, OTHER"
-        integer score "0 to 100 quality score"
-        uuid assignedToId FK "Indexed"
-        boolean isOverdue "Flagged if >24h in NEW"
+        uuid id PK
+        uuid clientId FK
+        string name "pg_trgm indexed"
+        string phone
+        string email
+        string serviceNeeded "Fixed service tier"
+        int budget "Whole INR rupees"
+        string message
+        string status "NEW, CONTACTED, PROPOSAL_SENT, WON, LOST"
+        string source "WEBSITE, GOOGLE_ADS, FACEBOOK, REFERRAL, OTHER"
+        int score "0 to 100 quality score"
+        uuid assignedToId FK
+        boolean isOverdue "Flagged if overdue past 24h"
         timestamp contactedAt "Timestamp of first contact"
-        timestamp createdAt "Indexed"
+        timestamp createdAt
         timestamp updatedAt
     }
 
     NOTE {
-        Data_Type id Primary_Key
-        uuid leadId FK "Indexed"
+        uuid id PK
+        uuid leadId FK
         uuid authorId FK
-        text content
+        string content
         boolean isInternal "Hidden from client portal"
         timestamp createdAt
     }
 
     ACTIVITY_LOG {
-        Data_Type id Primary_Key
-        uuid leadId FK "Indexed"
+        uuid id PK
+        uuid leadId FK
         uuid actorId FK
-        varchar action "STATUS_CHANGE, REASSIGN, NOTE_ADDED"
+        string action "STATUS_CHANGE, REASSIGN, NOTE_ADDED"
         jsonb metadata "Old and new values"
         timestamp createdAt
     }
 
     NOTIFICATION {
-        Data_Type id Primary_Key
-        uuid recipientId FK "Indexed"
+        uuid id PK
+        uuid recipientId FK
         uuid leadId FK
-        varchar title
-        text message
+        string title
+        string message
         boolean isRead
         timestamp createdAt
     }
 ```
+
 
 ### Table Indexing Strategy
 - **Composite Indexes:** `[clientId, status]`, `[assignedToId, status]`, and `[isOverdue, status]` ensure index-only scans on lead dashboard queries.
